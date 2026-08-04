@@ -1,6 +1,6 @@
 import React from 'react'
 import Book from './ui/Book.jsx'
-import {books} from '../dada'
+import {books} from '../data'
 
 const Featured = () => {
     console.log(books);
@@ -17,7 +17,7 @@ const Featured = () => {
                     .filter(book => book.rating === 5)
                     .slice(0, 4)
                     .map((book) => (
-                        <Book book={book} />
+                        <Book book={book} key={book.id}/>
                     ))}
                 </div>
             </div>
