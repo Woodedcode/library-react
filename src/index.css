@@ -366,6 +366,11 @@ FEATURES
   background-color: rgba(115, 66, 214, 0.1);
 }
 
+.section__title {
+  position: relative;
+  z-index: 10;
+}
+
 .books {
   display: flex;
   flex-wrap: wrap;
