@@ -4,8 +4,8 @@ import Book from './ui/Book.jsx'
 import {data} from '../dada'
 
 const Featured = () => {
+    books.filter(book => book.rating === 5).slice(0, 4);
     function getFiveStarBooks() {
-        books.filter(book => book.rating === 5)
     }
   return (
     <section id="featured">
