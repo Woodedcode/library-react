@@ -13,7 +13,7 @@ const Nav = () => {
     }
     
     return (
-        <nav>
+        <nav id='home'>
             <div className="nav__container">
                 <Link to="/">
                     <img src={LibraryLogo} alt="" className="logo" />
