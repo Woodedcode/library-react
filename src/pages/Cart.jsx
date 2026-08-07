@@ -1,6 +1,15 @@
-import React from 'react'
+import React from "react";
+import EmptyCart from "../assets/empty_cart.svg";
+import { Link } from "react-router-dom";
 
-const Cart = () => {
+const Cart = ({ cart, updateCart, removeItem }) => {
+  const subtotal = cart.reduce((total, item) => {
+    const price = item.salePrice || item.originalPrice;
+    return total + price * item.quantity;
+  }, 0);
+  const tax = subtotal * 0.08;
+  const total = subtotal + tax;
+
   return (
     <div id="books__body">
       <div id="books__main">
@@ -11,57 +20,84 @@ const Cart = () => {
             </div>
             <div className="cart">
               <div className="cart__header">
-              <span className="cart__book">Book</span>
-              <span className="cart__quantity">Quantity</span>
-              <span className="cart__total">Total</span>
+                <span className="cart__book">Book</span>
+                <span className="cart__quantity">Quantity</span>
+                <span className="cart__total">Total</span>
               </div>
               <div className="cart__body">
-                <div className="cart__item">
-                  <div className="cart__book">
-                    <img src="" className="cart__book--img" alt="" />
-                    <div className="cart__book--info">
-                      <span className="cart__book--title">
-                        Crack the coding interview
-                      </span>
-                      <span className="cart__book--price">
-                        $10.00
-                      </span>
-                      <button className="cart__book--remove">
-                        remove
-                      </button>
+                {cart.map((item) => {
+                  const itemPrice = item.salePrice || item.originalPrice;
+                  return (
+                    <div className="cart__item" key={item.id}>
+                      <div className="cart__book">
+                        <img src={item.url} className="cart__book--img" alt="" />
+                        <div className="cart__book--info">
+                          <span className="cart__book--title">{item.title}</span>
+                          <span className="cart__book--price">
+                            ${itemPrice.toFixed(2)}
+                          </span>
+                          <button
+                            className="cart__book--remove"
+                            onClick={() => removeItem(item)}
+                          >
+                            remove
+                          </button>
+                        </div>
+                      </div>
+                      <div className="cart__quantity">
+                        <input
+                          type="number"
+                          min={0}
+                          max={99}
+                          className="cart__input"
+                          value={item.quantity}
+                          onChange={(event) => updateCart(item, event.target.value)}
+                        />
+                      </div>
+                      <div className="cart__total">
+                        ${(itemPrice * item.quantity).toFixed(2)}
+                      </div>
                     </div>
-                  </div>
-                  <div className="cart__quantity">
-                    <input type="number" min={0} max={99} className="cart__input" />
-                  </div>
-                  <div className="cart__total">
-                    $10.00
-                  </div>
+                  );
+                })}
+              </div>
+              {cart.length === 0 && (
+                <div className="cart__empty">
+                  <img src={EmptyCart} alt="" className="cart__empty--img" />
+                  <h2>You don't have any books in your cart!</h2>
+                  <Link to="/books">
+                    <button className="btn">Browse books</button>
+                  </Link>
                 </div>
-              </div>
+              )}
             </div>
-            <div className="total">
-              <div className="total__item total__sub-total">
-                <span>Subtotal</span>
-                <span>$9.99</span>
+            {cart.length > 0 && (
+              <div className="total">
+                <div className="total__item total__sub-total">
+                  <span>Subtotal</span>
+                  <span>${subtotal.toFixed(2)}</span>
+                </div>
+                <div className="total__item total__tax">
+                  <span>Tax</span>
+                  <span>${tax.toFixed(2)}</span>
+                </div>
+                <div className="total__item total__price">
+                  <span>Total</span>
+                  <span>${total.toFixed(2)}</span>
+                </div>
+                <button
+                  className="btn btn__checkout no-cursor"
+                  onClick={() => alert(`You really think this worked?!`)}
+                >
+                  Proceed to checkout
+                </button>
               </div>
-              <div className="total__item total__tax">
-                <span>Tax</span>
-                <span>$9.99</span>
-              </div>
-              <div className="total__item total__price">
-                <span>Total</span>
-                <span>$9.99</span>
-              </div>
-              <button className="btn btn__checkout no-cursor" onClick={() => alert(`use Claude for help`)}>
-                Proceed to checkout
-              </button>
-            </div>
+            )}
           </div>
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
 export default Cart;

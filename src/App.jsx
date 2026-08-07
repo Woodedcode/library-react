@@ -29,7 +29,21 @@ function App() {
         else {
             setCart([...cart, {...book, quantity: 1}])
         }
-}
+    }
+
+    function updateCart(book, quantity) {          
+        setCart(cart.map(item => {
+            if (item.id === book.id) {
+                return { ...item, quantity: +quantity };
+            }
+            return item;
+        }));
+    }
+
+    function removeItem(book) {                    
+        setCart(cart.filter(item => item.id !== book.id));
+    }
+
 useEffect(() => {
     console.log(cart)
 }, [cart])
@@ -37,11 +51,11 @@ useEffect(() => {
   return (
     <Router>
       <div className="App">
-        <Nav />
+        <Nav cart={cart}/>
           <Route path="/" exact component={Home} />
           <Route path="/books" exact render={() => <Books books={books} />} />
           <Route path="/books/:id" render={() => <BookInfo books={books} addToCart={addToCart} cart={cart}/>} />
-          <Route path="/cart" render={() => <Cart books={books} />} />
+          <Route path="/cart" render={() => <Cart cart={cart} updateCart={updateCart} removeItem={removeItem} />} />
         <Footer />
       </div>
     </Router>
